@@ -7,8 +7,7 @@ with open("Prueba_Amplitud.txt", 'r') as f:
 matriz = []
 #Convertir el string a una matriz
 for linea in matriz_string.split('\n'):
-    matriz.append(linea.split(' '))
-print(matriz)       
+    matriz.append(linea.split(' ')) 
 
 #Ubicar posición del elemento
 def ubicarElemento (matriz, elementoabuscar):
