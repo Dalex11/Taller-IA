@@ -1,5 +1,5 @@
 import tkinter as tk
-from main import tiempo_total, expandidos, matriz
+from Recorrido import tiempo_total, expandidos, matriz
 from PIL import Image, ImageTk
 import time
 
