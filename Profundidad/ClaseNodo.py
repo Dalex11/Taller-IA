@@ -22,14 +22,6 @@ def ubicarElemento(matriz, elementoabuscar):
                 return coordenadas
     return -1
 
-def hayCiclo(posibleEstado, nodoPadre):
-    if not nodoPadre.get_padre(): # el nodo no tiene padre (es la raíz)
-        return False # el estado del hijo es diferente a todos los ancestros
-    elif posibleEstado == nodoPadre.get_padre().get_estado(): # el estado del hijo es igual al del padre
-        return True # el estado del hijo es igual a uno de sus ancestros
-    else:
-        return hayCiclo(posibleEstado, nodoPadre.get_padre()) # recursivamente revisa al siguiente ancestro
-
 # Clase Nodo
 class Nodo:
     # Constructor
@@ -45,6 +37,9 @@ class Nodo:
 
     def get_estado(self):
         return self.estado
+    
+    def get_profundidad(self):
+        return self.profundidad
 
     # Método que verifica si la fila y la columna del nodo existen en la matriz
     def verificarExistencia(self, fila, columna):
@@ -69,9 +64,8 @@ class Nodo:
                 # Actualizar la matriz con el movimiento
                 matriz_aux[fila + row][columna + column] = '2'
                 matriz_aux[fila][columna] = '0'
-                if hayCiclo(matriz_aux, self) == False:
-                    # Agregar la actualización al arreglo
-                    movimientos.append((matriz_aux, operador))
+                # Agregar la actualización al arreglo
+                movimientos.append((matriz_aux, operador))
 
         # Devolver el arreglo de movimientos válidos
         return movimientos
