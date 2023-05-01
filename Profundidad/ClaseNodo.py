@@ -31,8 +31,6 @@ def hayCiclo(posibleEstado, nodoPadre):
         return hayCiclo(posibleEstado, nodoPadre.get_padre()) # recursivamente revisa al siguiente ancestro
 
 # Clase Nodo
-
-
 class Nodo:
     # Constructor
     def __init__(self, estado, padre, operador):

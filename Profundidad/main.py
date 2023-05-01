@@ -21,7 +21,7 @@ def recorrerMatriz():
     #Ejecute mientras la pila este llena
     while len(pila) != 0:
         #Sacar padre de la pila
-        padre_expandido = pila.pop()
+        padre_expandido = pila.pop(0)
 
         #Verificar si es meta
         if padre_expandido.esMeta(padre_expandido.estado) == True:
@@ -30,16 +30,13 @@ def recorrerMatriz():
             return
 
         #Crear hijos
-        for nueva_matriz, operador in padre_expandido.moverElemento(padre_expandido.estado)[::-1]:
+        for nueva_matriz, operador in padre_expandido.moverElemento(padre_expandido.estado):
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
             #llamar el método profundidad para que modifique el valor del atributo.
             hijo.modificarProfundidad()
             
-            #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces
-            if padre_expandido.profundidad == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado():
-                #Agreguelo al inicio de la pila
-                pila.append(hijo)
+        pila.insert(0,hijo)
         
         #Agregar padre a la lista de nodos espandidos
         expandidos.append(padre_expandido)
