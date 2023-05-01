@@ -1,7 +1,7 @@
 import copy
 
 # 1.  Leer archivo .txt
-with open("Prueba_Amplitud.txt", 'r') as f:
+with open("..\Matrices_de_prueba\Prueba_Amplitud2.txt", 'r') as f:
     matriz_string = f.read()
 
 matriz = []
