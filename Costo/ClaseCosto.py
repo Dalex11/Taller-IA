@@ -41,12 +41,12 @@ def ubicarEnemigos (matriz):
 # Clase Nodo
 class Nodo:
     #Constructor
-    def __init__(self, estado, padre,operador):
+    def __init__(self, estado, padre, operador):
         self.estado = estado
         self.padre = padre
         self.operador = operador
         self.costo = 0
-        self.enemigo = []
+        self.enemigo = '0'
         self.semilla = 0
 
     #Métodos getters
@@ -56,12 +56,24 @@ class Nodo:
     def get_estado(self):
         return self.estado
     
-    def get_casilla(self):
-        return self.casilla
+    def get_enemigo(self):
+        return self.enemigo
+    
+    def get_costo(self):
+        return self.costo
+    
+    def get_semilla(self):
+        return self.semilla
     
     #Métodos setters
-    def set_casilla(self, valor):
+    def set_enemigo(self, valor):
         self.enemigo = valor
+
+    def set_costo(self, valor):
+        self.costo = self.costo + valor
+
+    def set_semilla(self, valor):
+        self.semilla = self.semilla + valor
 
     #Método que verifica si la fila y la columna del nodo existen en la matriz
     def verificarExistencia (self, fila, columna):
@@ -84,25 +96,64 @@ class Nodo:
                 #copiar matriz original
                 matriz_aux = copy.deepcopy(matriz)
                 # Actualizar la matriz con el movimiento
-                matriz_aux[fila + row][columna + column] = '2'
-                if matriz2[fila][columna] == '3' or matriz2[fila][columna] == '4':
-                    if self.semilla > 0:
-                        matriz_aux[fila][columna] = '0'
-                        self.semilla -= 1
-                    else:
-                        matriz_aux[fila][columna] = matriz2[fila][columna]
+                # matriz_aux[fila + row][columna + column] = '2'
+                # if matriz2[fila][columna] == '3' or matriz2[fila][columna] == '4':
+                #     if self.semilla > 0:
+                #         matriz_aux[fila][columna] = '0'
+                #         self.semilla -= 1
+                #     else:
+                #         matriz_aux[fila][columna] = matriz2[fila][columna]
+                # elif matriz2[fila + row][columna + column] == '5':
+                #     matriz_aux[fila][columna] = '0'
+                #     self.semilla += 1
+                # else:
+                #     matriz_aux[fila][columna] = '0'
+                ###########################################################
+                # if matriz2[fila][columna] == '3' or matriz2[fila][columna] == '4':
+                #     if self.semilla == 0:
+                #         matriz_aux[fila][columna] = matriz2[fila][columna]
+                #         self.costo +=  3
+                #     else:
+                #         matriz_aux[fila][columna] = '0'
+                #         self.semilla -= 1
+                # elif matriz2[fila][columna] == '5':
+                #     matriz_aux[fila][columna] = '0'
+                #     self.semilla += 1
+                # else:
+                #     matriz_aux[fila][columna] = '0'
+                # matriz_aux[fila + row][columna + column] = '2'
+                #############################################################
+                if (self.padre != None):
+                    matriz_aux[fila][columna] = self.padre.get_enemigo()
+                    self.set_semilla(self.padre.get_semilla())
                 else:
                     matriz_aux[fila][columna] = '0'
+                if matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
+                    if self.get_semilla() == 0:
+                        self.set_enemigo(matriz_aux[fila + row][columna + column])
+                    else:
+                        self.set_semilla(-1)
+                        self.set_enemigo('0')
+                elif matriz_aux[fila + row][columna + column] == '5':
+                    self.set_semilla(1)
+                    self.set_enemigo('0')
+                else:
+                    self.set_enemigo('0')
+                matriz_aux[fila + row][columna + column] = '2'
                 # Agregar la actualización al arreglo    
                 movimientos.append((matriz_aux, operador))
-
         # Devolver el arreglo de movimientos válidos
         return movimientos
 
     #Método que aumenta el costo del nodo
     def modificarCosto (self):
         if (self.padre != None):
-            self.costo = self.padre.costo + 1
+            if self.padre.get_enemigo() == '3':
+                self.costo = self.padre.costo + 4
+            elif self.padre.get_enemigo() == '4':
+                self.costo = self.padre.costo + 7
+            else:
+                self.costo = self.padre.costo + 1
 
     # Método meta
     def esMeta (self, matriz):

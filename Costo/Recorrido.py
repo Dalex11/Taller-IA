@@ -21,6 +21,9 @@ def recorrerMatriz ():
     while len(cola) != 0:
         #Sacar padre de la cola
         padre_expandido = cola.pop(0)
+        # for i in cola:
+        #     if cola.pop(i).get_costo() < padre_expandido.get_costo():
+        #         padre_expandido = cola.pop(i)
 
         #Verificar si es meta
         if padre_expandido.esMeta(padre_expandido.estado) == True:
