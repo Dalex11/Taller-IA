@@ -127,6 +127,7 @@ class Nodo:
                     matriz_aux[fila + row][columna + column] = '2'
                     matriz_aux[fila][columna] = self.get_enemigo()  
                     enemigo = '0' 
+                    semillas = self.semilla
                    
                 # Agregar la actualización al arreglo    
                 movimientos.append((matriz_aux, operador,semillas, enemigo))
