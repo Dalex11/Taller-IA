@@ -98,7 +98,7 @@ class Nodo:
                     semillas = self.get_semilla()+1
                     # Actualizar la matriz con el movimiento
                     matriz_aux[fila + row][columna + column] = '2'
-                    matriz_aux[fila][columna] = '0'
+                    matriz_aux[fila][columna] = self.enemigo
 
                 #Si el elemento es un freezer o un cell
                 elif matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
