@@ -8,6 +8,12 @@ import time
 cola = [] #Guadará los nodos hijos
 expandidos = [] #Guadará los nodos expandidos
 
+#Función que arroja la posición del nodo con menor costo
+def hallarPosicionNodoMenorCosto(colaN):
+    nodo = min(colaN, key=lambda x: x.get_costo())
+    posicion = colaN.index(nodo)
+    return posicion
+
 #Función recorrer matriz
 def recorrerMatriz ():
     #Definir padre inicial
@@ -19,11 +25,9 @@ def recorrerMatriz ():
 
     #Ejecute mientras la cola este llena
     while len(cola) != 0:
-        #Sacar padre de la cola
-        padre_expandido = cola.pop(0)
-        for nodo in cola:
-            if nodo.get_costo() < padre_expandido.get_costo():
-                padre_expandido = nodo
+ 
+        #Sacar el nodo con menor costo y almacenarlo en la variable padre_expandido    
+        padre_expandido = cola.pop(hallarPosicionNodoMenorCosto(cola))
 
         #Verificar si es meta
         if padre_expandido.esMeta(padre_expandido.estado) == True:
@@ -32,10 +36,14 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador in padre_expandido.moverElemento(padre_expandido.estado):    
+        for nueva_matriz, operador, semillas, pos_enemigo in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
-            #llamar el método prfundidad para que modifique el valor del atributo.
+            #Modificar el enemigo
+            hijo.set_enemigo(pos_enemigo)
+            #Modificar estado de semilla
+            hijo.set_semilla(semillas)
+            #llamar el método modificarCosto para que modifique el costo del nodo
             hijo.modificarCosto()
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 

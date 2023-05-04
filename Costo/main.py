@@ -89,6 +89,10 @@ def verMatriz (matriz,url,etiqueta):
                 dibujarImagen(url[4],etiqueta,45,45,j*cell_width, i*cell_height)
             if valor == '6':
                 dibujarImagen(url[5],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '7':
+                dibujarImagen(url[6],etiqueta,45,45,j*cell_width, i*cell_height) 
+            if valor == '8':
+                dibujarImagen(url[7],etiqueta,45,45,j*cell_width, i*cell_height)       
 
 # 2.  Mostrar el estado inicial  
 #Función que mostrará la matriz incial
@@ -101,7 +105,7 @@ verMatrizInical()
 def animacion ():
     for matriz in caminos_final[1:]:
         verMatriz(matriz,["../imagenes/muro.png","../imagenes/gokú.png","../imagenes/freezer.png","../imagenes/cell.png","../imagenes/semilla.png","../imagenes/esfera.png"],'imagen')
-        time.sleep(0.1)
+        time.sleep(0.01)
         ventana.update()
     mostrarReporte()    
 
