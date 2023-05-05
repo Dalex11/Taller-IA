@@ -121,6 +121,7 @@ class Nodo:
                         enemigo = '0'
                         # Actualizar la matriz con el movimiento
                         matriz_aux[fila + row][columna + column] = '2'
+                        # Cuando hay semilla, el enemigo desaparecerá definitivamente
                         matriz_aux[fila][columna] = '0'
 
                 #Si el padre tiene algún enemigo, entonces reemplacelo       
