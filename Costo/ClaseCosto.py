@@ -96,9 +96,11 @@ class Nodo:
                 if(matriz_aux[fila + row][columna + column] == '5'):
                     #Almacéne la semilla en el hijo, semilla del padre mas uno.
                     semillas = self.get_semilla()+1
-                    # Actualizar la matriz con el movimiento
+                    #Actualizar la matriz con el movimiento
                     matriz_aux[fila + row][columna + column] = '2'
                     matriz_aux[fila][columna] = self.enemigo
+                    #Después de coger una esfera el hijo no tendrá enemigos pendientes 
+                    enemigo = '0'
 
                 #Si el elemento es un freezer o un cell
                 elif matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
@@ -111,7 +113,7 @@ class Nodo:
                         semillas = self.get_semilla()
                         # Actualizar la matriz con el movimiento
                         matriz_aux[fila + row][columna + column] = '2'
-                        matriz_aux[fila][columna] = '0'
+                        matriz_aux[fila][columna] = self.enemigo #En veremos
                     else:
                         #Disminuir semilla puesto que se debe usar y guarda estado de semilla en hijo
                         semillas = self.get_semilla()-1
