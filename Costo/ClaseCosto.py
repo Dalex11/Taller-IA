@@ -2,13 +2,14 @@ import copy
 import numpy as np
 
 # 1.  Leer archivo .txt
-with open("..\Matrices_de_prueba\Prueba1.txt", 'r') as f:
+with open("..\Matrices_de_prueba\PruebaConEnemigos.txt", 'r') as f:
     matriz_string = f.read()
 
 matriz = []
 #Convertir el string a una matriz
 for linea in matriz_string.split('\n'):
     matriz.append(linea.split(' '))
+      
       
 #Ubicar posición del elemento
 def ubicarElemento (matriz, elementoabuscar):
@@ -103,6 +104,29 @@ class Nodo:
                         # Actualizar la matriz con el movimiento
                         matriz_aux[fila + row][columna + column] = '2'
                         matriz_aux[fila][columna] = self.enemigo #En veremos
+
+                #Si es una semilla
+                if(matriz_aux[fila + row][columna + column] == '5'):
+                    #Almacéne la semilla en el hijo, semilla del padre mas uno.
+                    semillas = self.get_semilla()+1
+                    #Actualizar la matriz con el movimiento
+                    matriz_aux[fila + row][columna + column] = '2'
+                    matriz_aux[fila][columna] = self.enemigo
+                    #Después de coger una esfera el hijo no tendrá enemigos pendientes 
+                    enemigo = '0'
+
+                #Si el elemento es un freezer o un cell
+                elif matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
+
+                    #Si no hay semillas
+                    if self.get_semilla() <= 0 :
+                        #Valor del enemigo
+                        enemigo = matriz_aux[fila + row][columna + column]
+                        #Guarda estado de semilla en hijo
+                        semillas = self.get_semilla()
+                        # Actualizar la matriz con el movimiento
+                        matriz_aux[fila + row][columna + column] = '2'
+                        matriz_aux[fila][columna] = self.enemigo #En veremos
                     else:
                         #Disminuir semilla puesto que se debe usar y guarda estado de semilla en hijo
                         semillas = self.get_semilla()-1
@@ -128,6 +152,7 @@ class Nodo:
 
         # Devolver el arreglo de movimientos válidos
         return movimientos
+        
         
     def modificarCosto (self):
         if self.get_enemigo() == '3':
