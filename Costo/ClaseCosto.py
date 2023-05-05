@@ -2,7 +2,7 @@ import copy
 import numpy as np
 
 # 1.  Leer archivo .txt
-with open("Prueba1.txt", 'r') as f:
+with open("..\Matrices_de_prueba\Prueba1.txt", 'r') as f:
     matriz_string = f.read()
 
 matriz = []
@@ -52,15 +52,8 @@ class Nodo:
     def set_enemigo(self, valor):
         self.enemigo = valor
 
-    # def set_costo(self, valor):
-    #     self.costo = self.costo + valor
-
     def set_semilla(self, valor):
         self.semilla = valor
-
-    #Método que modifica el valor de una semilla
-    # def modificarSemilla (self, valor):
-    #     self.semilla = self.semilla + valor
 
     #Método que verifica si la fila y la columna del nodo existen en la matriz
     def verificarExistencia (self, fila, columna):
@@ -78,10 +71,6 @@ class Nodo:
         movimientos = []
         enemigo = '0'
         semillas = 0
-
-        #Vaya pasando el estado de la semilla del abuelo al padre
-        # if (self.get_padre() != None):
-        #     self.set_semilla( self.get_padre().get_semilla() )
 
         # Intentar realizar cada movimiento válido
         for row, column, operador in [(0, 1, "derecha"), (0, -1, "izquierda"), (-1, 0, "subir"), (1, 0, "bajar")]:
@@ -124,12 +113,13 @@ class Nodo:
                         # Cuando hay semilla, el enemigo desaparecerá definitivamente
                         matriz_aux[fila][columna] = '0'
 
-                #Si el padre tiene algún enemigo, entonces reemplacelo       
+                #sino, mueva a gokú y coloque al enemigo cuando sea necesario      
                 else :
-                    #Haya semilla o no, guarde el estado en el hijo
                     matriz_aux[fila + row][columna + column] = '2'
                     matriz_aux[fila][columna] = self.get_enemigo()  
+                    #El enemigo será cero
                     enemigo = '0' 
+                    #Haya semilla o no, guarde el estado en el hijo
                     semillas = self.semilla
                    
                 # Agregar la actualización al arreglo    
@@ -139,7 +129,6 @@ class Nodo:
         return movimientos
         
     def modificarCosto (self):
-        #if (self.padre != None):
         if self.get_enemigo() == '3':
             self.costo = self.padre.costo + 4
         elif self.get_enemigo() == '4':
