@@ -9,13 +9,7 @@ matriz = []
 #Convertir el string a una matriz
 for linea in matriz_string.split('\n'):
     matriz.append(linea.split(' '))
-
-matriz2 = []
-#Convertir el string a una matriz
-for linea in matriz_string.split('\n'):
-    matriz2.append(linea.split(' '))
       
-
 #Ubicar posición del elemento
 def ubicarElemento (matriz, elementoabuscar):
     coordenadas = []
@@ -26,17 +20,6 @@ def ubicarElemento (matriz, elementoabuscar):
                 coordenadas.append(fila.index(elemento))
                 return coordenadas
     return -1
-
-def ubicarEnemigos (matriz):
-    coordenadas = []
-    coor = []
-    for fila in matriz:
-        for elemento in fila:
-            if elemento == '3' or elemento == '4':
-                coordenadas.append(matriz.index(fila))
-                coordenadas.append(fila.index(elemento))
-                coor.append(coordenadas)
-                coordenadas.pop()
 
 # Clase Nodo
 class Nodo:
@@ -69,18 +52,23 @@ class Nodo:
     def set_enemigo(self, valor):
         self.enemigo = valor
 
-    def set_costo(self, valor):
-        self.costo = self.costo + valor
+    # def set_costo(self, valor):
+    #     self.costo = self.costo + valor
 
     def set_semilla(self, valor):
-        self.semilla = self.semilla + valor
+        self.semilla = valor
+
+    #Método que modifica el valor de una semilla
+    # def modificarSemilla (self, valor):
+    #     self.semilla = self.semilla + valor
 
     #Método que verifica si la fila y la columna del nodo existen en la matriz
     def verificarExistencia (self, fila, columna):
         return fila > -1 and fila < len(matriz[0]) and columna > -1 and columna < len(matriz)
     
     #Método para mover elemento
-    def moverElemento(self,matriz):
+    def moverElemento(self):
+        matriz = self.estado
         # Ubicar a gokú y sus coordenadas
         elemento = ubicarElemento(matriz, '2')
         fila = elemento[0]
@@ -88,72 +76,75 @@ class Nodo:
 
         # Variable necesaria
         movimientos = []
+        enemigo = '0'
+        semillas = 0
+
+        #Vaya pasando el estado de la semilla del abuelo al padre
+        # if (self.get_padre() != None):
+        #     self.set_semilla( self.get_padre().get_semilla() )
 
         # Intentar realizar cada movimiento válido
         for row, column, operador in [(0, 1, "derecha"), (0, -1, "izquierda"), (-1, 0, "subir"), (1, 0, "bajar")]:
+
             # Verificar si el movimiento es válido
             if self.verificarExistencia(fila + row, columna + column) and matriz[fila + row][columna + column] != '1':
+
                 #copiar matriz original
                 matriz_aux = copy.deepcopy(matriz)
-                # Actualizar la matriz con el movimiento
-                # matriz_aux[fila + row][columna + column] = '2'
-                # if matriz2[fila][columna] == '3' or matriz2[fila][columna] == '4':
-                #     if self.semilla > 0:
-                #         matriz_aux[fila][columna] = '0'
-                #         self.semilla -= 1
-                #     else:
-                #         matriz_aux[fila][columna] = matriz2[fila][columna]
-                # elif matriz2[fila + row][columna + column] == '5':
-                #     matriz_aux[fila][columna] = '0'
-                #     self.semilla += 1
-                # else:
-                #     matriz_aux[fila][columna] = '0'
-                ###########################################################
-                # if matriz2[fila][columna] == '3' or matriz2[fila][columna] == '4':
-                #     if self.semilla == 0:
-                #         matriz_aux[fila][columna] = matriz2[fila][columna]
-                #         self.costo +=  3
-                #     else:
-                #         matriz_aux[fila][columna] = '0'
-                #         self.semilla -= 1
-                # elif matriz2[fila][columna] == '5':
-                #     matriz_aux[fila][columna] = '0'
-                #     self.semilla += 1
-                # else:
-                #     matriz_aux[fila][columna] = '0'
-                # matriz_aux[fila + row][columna + column] = '2'
-                #############################################################
-                if (self.padre != None):
-                    matriz_aux[fila][columna] = self.padre.get_enemigo()
-                    self.set_semilla(self.padre.get_semilla())
-                else:
-                    matriz_aux[fila][columna] = '0'
-                if matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
-                    if self.get_semilla() == 0:
-                        self.set_enemigo(matriz_aux[fila + row][columna + column])
+
+                #Si es una semilla
+                if(matriz_aux[fila + row][columna + column] == '5'):
+                    #Almacéne la semilla en el hijo, semilla del padre mas uno.
+                    semillas = self.get_semilla()+1
+                    #Actualizar la matriz con el movimiento
+                    matriz_aux[fila + row][columna + column] = '2'
+                    matriz_aux[fila][columna] = self.enemigo
+                    #Después de coger una esfera el hijo no tendrá enemigos pendientes 
+                    enemigo = '0'
+
+                #Si el elemento es un freezer o un cell
+                elif matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
+
+                    #Si no hay semillas
+                    if self.get_semilla() <= 0 :
+                        #Valor del enemigo
+                        enemigo = matriz_aux[fila + row][columna + column]
+                        #Guarda estado de semilla en hijo
+                        semillas = self.get_semilla()
+                        # Actualizar la matriz con el movimiento
+                        matriz_aux[fila + row][columna + column] = '2'
+                        matriz_aux[fila][columna] = self.enemigo #En veremos
                     else:
-                        self.set_semilla(-1)
-                        self.set_enemigo('0')
-                elif matriz_aux[fila + row][columna + column] == '5':
-                    self.set_semilla(1)
-                    self.set_enemigo('0')
-                else:
-                    self.set_enemigo('0')
-                matriz_aux[fila + row][columna + column] = '2'
+                        #Disminuir semilla puesto que se debe usar y guarda estado de semilla en hijo
+                        semillas = self.get_semilla()-1
+                        #Guardar valor del enemigo
+                        enemigo = '0'
+                        # Actualizar la matriz con el movimiento
+                        matriz_aux[fila + row][columna + column] = '2'
+                        matriz_aux[fila][columna] = '0'
+
+                #Si el padre tiene algún enemigo, entonces reemplacelo       
+                else :
+                    #Haya semilla o no, guarde el estado en el hijo
+                    matriz_aux[fila + row][columna + column] = '2'
+                    matriz_aux[fila][columna] = self.get_enemigo()  
+                    enemigo = '0' 
+                    semillas = self.semilla
+                   
                 # Agregar la actualización al arreglo    
-                movimientos.append((matriz_aux, operador))
+                movimientos.append((matriz_aux, operador,semillas, enemigo))
+
         # Devolver el arreglo de movimientos válidos
         return movimientos
-
-    #Método que aumenta el costo del nodo
+        
     def modificarCosto (self):
-        if (self.padre != None):
-            if self.padre.get_enemigo() == '3':
-                self.costo = self.padre.costo + 4
-            elif self.padre.get_enemigo() == '4':
-                self.costo = self.padre.costo + 7
-            else:
-                self.costo = self.padre.costo + 1
+        #if (self.padre != None):
+        if self.get_enemigo() == '3':
+            self.costo = self.padre.costo + 4
+        elif self.get_enemigo() == '4':
+            self.costo = self.padre.costo + 7
+        else:
+            self.costo = self.padre.costo + 1
 
     # Método meta
     def esMeta (self, matriz):
