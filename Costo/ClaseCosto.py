@@ -115,6 +115,7 @@ class Nodo:
 
                 #sino, mueva a gokú y coloque al enemigo cuando sea necesario      
                 else :
+                    # Actualizar la matriz con el movimiento
                     matriz_aux[fila + row][columna + column] = '2'
                     matriz_aux[fila][columna] = self.get_enemigo()  
                     #El enemigo será cero
