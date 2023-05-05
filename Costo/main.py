@@ -105,7 +105,7 @@ verMatrizInical()
 def animacion ():
     for matriz in caminos_final[1:]:
         verMatriz(matriz,["../imagenes/muro.png","../imagenes/gokú.png","../imagenes/freezer.png","../imagenes/cell.png","../imagenes/semilla.png","../imagenes/esfera.png"],'imagen')
-        time.sleep(0.00005)
+        time.sleep(0.1)
         ventana.update()
     mostrarReporte()    
 
