@@ -6,7 +6,7 @@ from Funciones.funciones import leerArchivo, calcularDuracion, revisarNodoRepeti
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
-matriz = leerArchivo("..\Matrices_de_prueba\prueba_SC_1.txt")
+matriz = leerArchivo("..\Matrices_de_prueba\prueba_SC_2.txt")
 
 # Aplicación del algoritmo
 #Recorrer la matriz por amplitud
