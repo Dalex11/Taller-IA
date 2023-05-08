@@ -2,7 +2,7 @@ import os, sys
 current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from Funciones.funciones import leerArchivo, calcularDuracion
+from Funciones.funciones import leerArchivo, calcularDuracion, revisarNodoRepetido
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
@@ -43,7 +43,7 @@ def recorrerMatriz ():
             hijo.modificarProfundidad()
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
-            if (padre_expandido.profundidad == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado()):
+            if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):
                 #Agreguelo al final de la cola
                 cola.append(hijo)
 

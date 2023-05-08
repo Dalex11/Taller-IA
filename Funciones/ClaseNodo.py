@@ -49,7 +49,7 @@ class Nodo:
         self.semilla = valor
 
     def set_valor_heuristica(self,valor):
-        self.valor_heuristica = valor    
+        self.valor_heuristica = valor        
 
     #Método para mover elemento
     def moverElemento(self):
@@ -63,7 +63,6 @@ class Nodo:
         movimientos = []
         enemigo = '0'
         semillas = 0
-        valor_heuristica = 0
 
         # Intentar realizar cada movimiento válido
         for row, column, operador in [(0, 1, "derecha"), (0, -1, "izquierda"), (-1, 0, "subir"), (1, 0, "bajar")]:
@@ -139,7 +138,6 @@ class Nodo:
     def modificarValorHeuristicaMasCosto(self):
         self.valor_heuristica_mas_costo = self.costo + self.valor_heuristica 
            
-
     # Método meta
     def esMeta (self, matriz):
         #Si la matriz no contiene esferas, es meta
