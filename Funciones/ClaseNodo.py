@@ -3,7 +3,7 @@ import os, sys
 current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from Funciones.funciones import calcularDistanciaManhattan, ubicarElemento
+from Funciones.funciones import ubicarElemento
       
 # Clase Nodo
 class Nodo:
@@ -83,8 +83,6 @@ class Nodo:
                     matriz_aux[fila][columna] = self.enemigo
                     #Después de coger una esfera el hijo no tendrá enemigos pendientes 
                     enemigo = '0'
-                    #Guardar valor de la heurítica
-                    valor_heuristica = calcularDistanciaManhattan(matriz_aux)
 
                 #Si el elemento es un freezer o un cell
                 elif matriz_aux[fila + row][columna + column] == '3' or matriz_aux[fila + row][columna + column] == '4':
@@ -98,8 +96,7 @@ class Nodo:
                         # Actualizar la matriz con el movimiento
                         matriz_aux[fila + row][columna + column] = '2'
                         matriz_aux[fila][columna] = self.enemigo #En veremos
-                        #Guardar valor de la heurítica
-                        valor_heuristica = calcularDistanciaManhattan(matriz_aux)
+
                     else:
                         #Disminuir semilla puesto que se debe usar y guarda estado de semilla en hijo
                         semillas = self.get_semilla()-1
@@ -109,8 +106,6 @@ class Nodo:
                         matriz_aux[fila + row][columna + column] = '2'
                         # Cuando hay semilla, el enemigo desaparecerá definitivamente
                         matriz_aux[fila][columna] = '0'
-                        #Guardar valor de la heurítica
-                        valor_heuristica = calcularDistanciaManhattan(matriz_aux)
 
                 #sino, mueva a gokú y coloque al enemigo cuando sea necesario      
                 else :
@@ -121,11 +116,9 @@ class Nodo:
                     enemigo = '0' 
                     #Haya semilla o no, guarde el estado en el hijo
                     semillas = self.semilla
-                    #Guardar valor de la heurítica
-                    valor_heuristica = calcularDistanciaManhattan(matriz_aux)
-                   
+                
                 # Agregar la actualización al arreglo    
-                movimientos.append((matriz_aux, operador,semillas, enemigo,valor_heuristica))
+                movimientos.append((matriz_aux, operador,semillas, enemigo))
 
         # Devolver el arreglo de movimientos válidos
         return movimientos
@@ -143,8 +136,8 @@ class Nodo:
         else:
             self.costo = self.padre.costo + 1
 
-    def modificarValorHeuristicaMasCosto(self,valor):
-        self.valor_heuristica_mas_costo = self.costo + valor  
+    def modificarValorHeuristicaMasCosto(self):
+        self.valor_heuristica_mas_costo = self.costo + self.valor_heuristica 
            
 
     # Método meta

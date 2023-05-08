@@ -2,11 +2,11 @@ import os, sys
 current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from Funciones.funciones import leerArchivo, calcularDuracion
+from Funciones.funciones import leerArchivo, calcularDuracion, calcularDistanciaManhattan
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
-matriz = leerArchivo("..\Matrices_de_prueba\prueba_CC_3.txt")
+matriz = leerArchivo("..\Matrices_de_prueba\prueba_CC_1.txt")
 
 # Aplicación del algoritmo
 #Recorrer la matriz por costo
@@ -37,7 +37,7 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador, semillas, pos_enemigo, valor_heuristica in padre_expandido.moverElemento():    
+        for nueva_matriz, operador, semillas, pos_enemigo in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
             #Modificar el enemigo
@@ -46,8 +46,12 @@ def recorrerMatriz ():
             hijo.set_semilla(semillas)
             #llamar el método modificarCosto para que modifique el costo del nodo
             hijo.modificarCosto()
+            #Calcular heurística
+            valor_heuristica = calcularDistanciaManhattan(nueva_matriz)
+            #llamar el método para que modifique el valor del atributo.
+            hijo.set_valor_heuristica(valor_heuristica)
             #Llamar método modificarValorHeuristicaMasCosto para sumar el costo + el valor de la heurística
-            hijo.modificarValorHeuristicaMasCosto(valor_heuristica)
+            hijo.modificarValorHeuristicaMasCosto()
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
             if (padre_expandido.get_costo() == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado()):

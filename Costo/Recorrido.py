@@ -37,7 +37,7 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador, semillas, pos_enemigo, valor_heuristica in padre_expandido.moverElemento():    
+        for nueva_matriz, operador, semillas, pos_enemigo in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
             #Modificar el enemigo

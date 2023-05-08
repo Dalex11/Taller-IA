@@ -2,7 +2,7 @@ import os, sys
 current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from Funciones.funciones import leerArchivo, revisarNodoRepetido, calcularDuracion
+from Funciones.funciones import leerArchivo, revisarNodoRepetido, calcularDuracion, calcularDistanciaManhattan
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
@@ -37,9 +37,11 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador, semillas, enemigo,valor_heuristica in padre_expandido.moverElemento():    
+        for nueva_matriz, operador, semillas, enemigo in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
+            #Calcular heurística
+            valor_heuristica = calcularDistanciaManhattan(nueva_matriz)
             #llamar el método para que modifique el valor del atributo.
             hijo.set_valor_heuristica(valor_heuristica)
             #Modificar profundidad
