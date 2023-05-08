@@ -1,69 +1,115 @@
-from ClaseNodo import Nodo
-from  ClaseNodo import matriz
+import tkinter as tk
+from recorrido import tiempo_total, expandidos, matriz
+from PIL import Image, ImageTk
 import time
 
-# Aplicación del algoritmo
-#Recorrer la matriz por amplitud
+#Guardar en una variable las matrices de los nodos en la lista expandidos
+nodo_actual = expandidos[len(expandidos)-1]
+caminos = []
+caminos_final = []
+while nodo_actual.padre is not None:
+    nodo_actual = nodo_actual.padre
+    caminos.append(nodo_actual.estado)
+caminos.insert(0,expandidos[len(expandidos)-1].estado) 
+caminos_final = caminos[::-1] #Arreglo que contiene los estados válidos desde la raíz hasta el final   
 
-#Variables necesarias
-pila = [] #Guardará los nodos hijos
-expandidos = [] #Guardará los nodos expandidos
+ventana = tk.Tk()
 
-def revisarNodoRepetido(posibleEstado, nodoPadre):
-    if nodoPadre.get_padre() == None: # el nodo no tiene padre (es la raíz)
-        return True # el estado del hijo es diferente a todos los ancestros
-    elif posibleEstado == nodoPadre.get_padre().get_estado(): # el estado del hijo es igual al del padre
-        return False # el estado del hijo es igual a uno de sus ancestros
-    else:
-        return revisarNodoRepetido(posibleEstado, nodoPadre.get_padre()) # recursivamente revisa al siguiente ancestro
+# Obtener el ancho y la altura de la pantalla
+ancho_pantalla = ventana.winfo_screenwidth()
+altura_pantalla = ventana.winfo_screenheight()
 
+# Calcular la posición x e y de la ventana para centrarla
+x = int((ancho_pantalla - 1150) / 2)  # ancho de la ventana es 800
+y = int((altura_pantalla - 700) / 2)  # altura de la ventana es 600
 
-#Función recorrer matriz
-def recorrerMatriz():
-    #Definir padre inicial
-    padre = Nodo(matriz, None, None)
-    #Agregar padre a la pila
-    pila.insert(0,padre)
-    #Variable que contendrá el primer elemeto de la pila, es decir el padre
-    padre_expandido = 0
+# Configurar la posición de la ventana
+ventana.geometry(f"1150x700+{x}+{y}")
+
+# Tamaño de cada celda
+cell_width = 50
+cell_height = 50
+
+# Crear el canvas y dibujar el cuadrado 
+canvas = tk.Canvas(ventana, width=cell_width*10, height=cell_height*10) #Ancho del widget canvas
+canvas.place(x=60, y=60, width=cell_width*10, height=cell_height*10) #Agregar canvas a la ventana
+cuadrado_matriz = canvas.create_rectangle(0,0,cell_width*10,cell_height*10)
+canvas.itemconfig(cuadrado_matriz, outline="black", width=7)
+
+# Dibujar la cuadrícula
+for i in range(10):
+    canvas.create_line(i*cell_width, 0, i*cell_width, cell_height*10) #Dibuja líneas verticales
+    canvas.create_line(0, i*cell_height, cell_width*10, i*cell_height) #Dibuja líneas horizontales
+
+imagen = None
+canvas.imagenes = []
+
+# Dibujar el contenido de cada celda
+def dibujarImagen (url,etiqueta,x,y,width,height):
+    imagen = Image.open(url)
+    imagen = imagen.resize((x,y))
+    imagen = ImageTk.PhotoImage(imagen)
+    canvas.create_image(width, height, anchor=tk.NW, image=imagen, tag=etiqueta)
+    canvas.imagenes.append(imagen)
+
+# Variable global para guardar la referencia de la imagen
+imagenT = None
+
+def mostrarReporte():
+    global imagenT
     
-    #Ejecute mientras la pila este llena
-    while len(pila) != 0:
-        #Sacar padre de la pila
-        padre_expandido = pila.pop(0)
+    profun = expandidos[len(expandidos)-1].profundidad
+    profun_string = str(profun)
+    cuadro_info = tk.Canvas(ventana, width=400, height=400)
+    cuadro_info.place(x=580, y=50, width=600, height=600)
+    cuadro_info.create_rectangle(50, 100, 500, 400, fill='white')
+    cuadro_info.create_text(250, 160, text='La profundidad de la solución es: ' + profun_string, width=400, font=("Arial", 15))
+    cuadro_info.create_text(250, 190, text='Cantidad de nodos expandidos: ' + str(len(expandidos)) + ' nodos', width=400, font=("Arial", 15))
+    cuadro_info.create_text(250, 220, text='Tiempo de cómputo: ' + str(round(tiempo_total, 3)) + ' segundos', width=400, font=("Arial", 15))
+    imagen = Image.open("../imagenes/muñeca.png")
+    imagen = imagen.resize((150, 150))
+    imagenT = ImageTk.PhotoImage(imagen)
+    cuadro_info.create_image(270, 300, image=imagenT)
 
-        #Verificar si es meta
-        if padre_expandido.esMeta(padre_expandido.estado) == True:
-            #Añada el nodo meta a la lista expandidos y salgase del while
-            expandidos.append(padre_expandido)
-            return
+#Función que muestra la matriz dada en la ventana
+def verMatriz (matriz,url,etiqueta):
+     # borramos todo lo dibujado anteriormente
+     canvas.delete(etiqueta)
+     for i, fila in enumerate(matriz):
+        for j, valor in enumerate(fila):
+            if valor == '2':
+                dibujarImagen(url[0],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '1':
+                dibujarImagen(url[1],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '6':
+                dibujarImagen(url[2],etiqueta,45,45,j*cell_width, i*cell_height)
 
-        #Crear hijos
-        for nueva_matriz, operador in padre_expandido.moverElemento(padre_expandido.estado):
-            #Cree el nodo hijo
-            hijo = Nodo(nueva_matriz, padre_expandido, operador)
-            #llamar el método profundidad para que modifique el valor del atributo.
-            hijo.modificarProfundidad()
-            
-            #Si el padre es la raiz o el hijo no ha existido en la rama, entonces 
-            if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):
-                #Agreguélo al principio de la pila
-                pila.insert(0,hijo)
-        
-        #Agregar padre a la lista de nodos expandidos
-        expandidos.append(padre_expandido)
-    print('No se puedo encontrar todas las esferas')
+# 2.  Mostrar el estado inicial  
+#Función que mostrará la matriz incial
+def verMatrizInical():
+    verMatriz(matriz, ["../imagenes/gokú.png","../imagenes/muro.png","../imagenes/esfera.png"],'imagen')
+
+verMatrizInical()
+
+#Función que permitirá visualizar la animación
+def animacion ():
+    for matriz in caminos_final[1:]:
+        verMatriz(matriz,["../imagenes/gokú.png","../imagenes/muro.png","../imagenes/esfera.png"],'imagen')
+        time.sleep(0.1)
+        ventana.update()
+    mostrarReporte()    
+
+#Agregar botones a la ventana y ejecutar función a darles click
+btn = tk.Button(ventana, text='Empezar', command = animacion, bg='black', fg='white', font=("Arial", 12))         
+btn.place(x=135,y=590, width=150, height=50)
+btn2 = tk.Button(ventana, text='Volver', command = verMatrizInical, bg='black', fg='white', font=("Arial", 12))         
+btn2.place(x=310,y=590, width=150, height=50)
+
+ventana.mainloop()
 
 
-#Función calcular tiempo de implementación de la función recorrerMatriz
-def calcularDuracion ():
-    #Hora inicio
-    inicio = time.time()
-    recorrerMatriz()
-    #Hora finalización
-    fin = time.time() 
-    #Diferencia entre tiempos para ver el tiempo gastado
-    return fin - inicio
 
-#Guardar tiempo en la variable 
-tiempo_total = calcularDuracion()
+
+
+
+

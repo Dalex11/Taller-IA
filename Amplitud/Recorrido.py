@@ -1,5 +1,12 @@
-from ClaseAmplitud import Nodo, matriz
-import time
+import os, sys
+current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
+parent_dir = os.path.dirname(current_dir)
+sys.path.append(parent_dir)
+from Funciones.funciones import leerArchivo, calcularDuracion
+from Funciones.ClaseNodo import Nodo
+
+# 1.  Leer archivo .txt
+matriz = leerArchivo("..\Matrices_de_prueba\prueba_SC_1.txt")
 
 # Aplicación del algoritmo
 #Recorrer la matriz por amplitud
@@ -29,7 +36,7 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador in padre_expandido.moverElemento(padre_expandido.estado):    
+        for nueva_matriz, operador, semillas, enemigo,valor_heuristica in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
             #llamar el método prfundidad para que modifique el valor del atributo.
@@ -44,15 +51,6 @@ def recorrerMatriz ():
         expandidos.append(padre_expandido)    
     print('No se puedo encontrar todas las esferas')
 
-#Función calcular tiempo de implementación de la función recorrerMatriz
-def calcularDuracion ():
-    #Hora inicio
-    inicio = time.time()
-    recorrerMatriz()
-    #Hora finalización
-    fin = time.time() 
-    #Diferencia entre tiempos para ver el tiempo gastado
-    return fin - inicio
 
 #Guardar tiempo en la variable 
-tiempo_total = calcularDuracion()
+tiempo_total = calcularDuracion(recorrerMatriz)

@@ -4,14 +4,16 @@ from PIL import Image, ImageTk
 import time
 
 #Guardar en una variable las matrices de los nodos en la lista expandidos
-nodo_actual = expandidos[len(expandidos)-1]
-caminos = []
-caminos_final = []
-while nodo_actual.padre is not None:
-    nodo_actual = nodo_actual.padre
-    caminos.append(nodo_actual.estado)
-caminos.insert(0,expandidos[len(expandidos)-1].estado) 
-caminos_final = caminos[::-1] #Arreglo que contiene los estados válidos desde la raíz hasta el final   
+def obtenerCaminos (expandidos):
+    nodo_actual = expandidos[len(expandidos)-1]
+    caminos = []
+    caminos_final = []
+    while nodo_actual.padre is not None:
+        nodo_actual = nodo_actual.padre
+        caminos.append(nodo_actual.estado)
+    caminos.insert(0,expandidos[len(expandidos)-1].estado) 
+    caminos_final = caminos[::-1] #Arreglo que contiene los estados válidos desde la raíz hasta el final   
+    return caminos_final
 
 ventana = tk.Tk()
 
@@ -101,11 +103,12 @@ def verMatrizInical():
 
 verMatrizInical()
 
+camino_final = obtenerCaminos(expandidos)
 #Función que permitirá visualizar la animación
 def animacion ():
-    for matriz in caminos_final[1:]:
+    for matriz in camino_final[1:]:
         verMatriz(matriz,["../imagenes/muro.png","../imagenes/gokú.png","../imagenes/freezer.png","../imagenes/cell.png","../imagenes/semilla.png","../imagenes/esfera.png"],'imagen')
-        time.sleep(0.01)
+        time.sleep(0.1)
         ventana.update()
     mostrarReporte()    
 

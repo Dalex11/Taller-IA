@@ -28,7 +28,7 @@ def recorrerMatriz ():
     while len(cola) != 0:
  
         #Sacar el nodo con menor costo y almacenarlo en la variable padre_expandido    
-        padre_expandido = cola.pop(cola.index(min(cola, key=lambda x: x.get_costo())))
+        padre_expandido = cola.pop(cola.index(min(cola, key=lambda x: x.get_valor_heuristica_mas_costo())))
 
         #Verificar si es meta
         if padre_expandido.esMeta(padre_expandido.estado) == True:
@@ -46,9 +46,11 @@ def recorrerMatriz ():
             hijo.set_semilla(semillas)
             #llamar el método modificarCosto para que modifique el costo del nodo
             hijo.modificarCosto()
+            #Llamar método modificarValorHeuristicaMasCosto para sumar el costo + el valor de la heurística
+            hijo.modificarValorHeuristicaMasCosto(valor_heuristica)
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
-            if (padre_expandido.costo == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado()):
+            if (padre_expandido.get_costo() == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado()):
                 #Agreguelo al final de la cola
                 cola.append(hijo)
 
