@@ -66,7 +66,6 @@ def mostrarReporte():
     cuadro_info = tk.Canvas(ventana, width=400, height=400)
     cuadro_info.place(x=580, y=50, width=600, height=600)
     cuadro_info.create_rectangle(50, 100, 500, 400, fill='white')
-    cuadro_info.create_text(250, 130, text='El costo de la solución es: ' + cost_string, width=400, font=("Arial", 15))
     cuadro_info.create_text(250, 160, text='La profundidad del nodo de la solución es: ' + deep_string, width=400, font=("Arial", 15))
     cuadro_info.create_text(250, 190, text='Cantidad de nodos expandidos: ' + str(len(expandidos)) + ' nodos', width=400, font=("Arial", 15))
     cuadro_info.create_text(250, 220, text='Tiempo de cómputo: ' + str(round(tiempo_total, 3)) + ' segundos', width=400, font=("Arial", 15))

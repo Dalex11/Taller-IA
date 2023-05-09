@@ -44,6 +44,8 @@ def recorrerMatriz ():
             valor_heuristica = calcularDistanciaManhattan(nueva_matriz)
             #llamar el método para que modifique el valor del atributo.
             hijo.set_valor_heuristica(valor_heuristica)
+            #llamar el método modificarCosto para que modifique el costo del nodo
+            hijo.modificarCosto()
             #llamar el método modificarProfundidad para que modifique el profundidad del nodo
             hijo.modificarProfundidad()
 
