@@ -130,10 +130,3 @@ btn2 = tk.Button(ventana, text='Volver', command = verMatrizInical, bg='black', 
 btn2.place(x=310,y=590, width=150, height=50)
 
 ventana.mainloop()
-
-
-
-
-
-
-
