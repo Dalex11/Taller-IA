@@ -1,8 +1,8 @@
 import tkinter as tk
-from recorrido import tiempo_total, expandidos, matriz
+from tkinter import StringVar
+from Amplitud import tiempo_total, expandidos, matriz
 from PIL import Image, ImageTk
 import time
-import os
 
 #Guardar en una variable las matrices de los nodos en la lista expandidos
 nodo_actual = expandidos[len(expandidos)-1]
@@ -31,11 +31,32 @@ ventana.geometry(f"1150x700+{x}+{y}")
 cell_width = 50
 cell_height = 50
 
-# Crear el canvas y dibujar el cuadrado 
 canvas = tk.Canvas(ventana, width=cell_width*10, height=cell_height*10) #Ancho del widget canvas
-canvas.place(x=60, y=60, width=cell_width*10, height=cell_height*10) #Agregar canvas a la ventana
-cuadrado_matriz = canvas.create_rectangle(0,0,cell_width*10,cell_height*10)
-canvas.itemconfig(cuadrado_matriz, outline="black", width=7)
+
+def on_select_change(event):
+    selected_option = select_var.get()
+    # Hacer algo con el valor seleccionado, por ejemplo, mostrar una vista relacionada
+    if selected_option:
+        # Crear el canvas y dibujar el cuadrado 
+        canvas.place(x=60, y=60, width=cell_width*10, height=cell_height*10) #Agregar canvas a la ventana
+        cuadrado_matriz = canvas.create_rectangle(0,0,cell_width*10,cell_height*10)
+        canvas.itemconfig(cuadrado_matriz, outline="black", width=7)
+        verMatrizInical()
+        #Agregar botones a la ventana y ejecutar función a darles click
+        btn = tk.Button(ventana, text='Empezar', command = animacion, bg='black', fg='white', font=("Arial", 12))         
+        btn.place(x=135,y=590, width=150, height=50)
+        btn2 = tk.Button(ventana, text='Volver', command = verMatrizInical, bg='black', fg='white', font=("Arial", 12))         
+        btn2.place(x=310,y=590, width=150, height=50)
+
+    
+
+# Crear una variable para almacenar el valor seleccionado
+select_var = StringVar(ventana)
+
+# Crear el OptionMenu con las opciones deseadas
+select_options = ['Amplitud', 'Costo', 'Profundidad', 'Avara', 'A*']
+select_menu = tk.OptionMenu(ventana, select_var, *select_options, command=on_select_change)
+select_menu.place(x=60, y=20)
 
 # Dibujar la cuadrícula
 for i in range(10):
@@ -96,17 +117,15 @@ def verMatriz (matriz,url,etiqueta):
             if valor == '7':
                 dibujarImagen(url[6],etiqueta,45,45,j*cell_width, i*cell_height) 
             if valor == '8':
-                dibujarImagen(url[7],etiqueta,45,45,j*cell_width, i*cell_height) 
+                dibujarImagen(url[7],etiqueta,45,45,j*cell_width, i*cell_height)       
 
-# 2.  Mostrar el estado inicial  
+# 2.  Mostrar el estado inicial
 # Lista de las url de las imagenes
 urlImagenes = ["../imagenes/muro.png","../imagenes/gokú.png","../imagenes/freezer.png","../imagenes/cell.png","../imagenes/semilla.png","../imagenes/esfera.png"]
-
+ 
 #Función que mostrará la matriz incial
 def verMatrizInical():
     verMatriz(matriz, urlImagenes,'imagen')
-
-verMatrizInical()
 
 #Función que permitirá visualizar la animación
 def animacion ():
@@ -114,26 +133,6 @@ def animacion ():
         verMatriz(matriz, urlImagenes,'imagen')
         time.sleep(0.1)
         ventana.update()
-    mostrarReporte()    
-
-#Función que permitirá volver al menú principal
-def volver ():
-    ventana.destroy()
-    os.system("cd ../ && python main.py")  
-
-#Agregar botones a la ventana y ejecutar función a darles click
-backBtn = tk.Button(ventana, text='Atras', command = volver, bg='black', fg='white', font=("Arial", 12))         
-backBtn.place(x=10,y=10, width=100, height=30)
-btn = tk.Button(ventana, text='Empezar', command = animacion, bg='black', fg='white', font=("Arial", 12))         
-btn.place(x=135,y=590, width=150, height=50)
-btn2 = tk.Button(ventana, text='Volver', command = verMatrizInical, bg='black', fg='white', font=("Arial", 12))         
-btn2.place(x=310,y=590, width=150, height=50)
+    mostrarReporte()
 
 ventana.mainloop()
-
-
-
-
-
-
-

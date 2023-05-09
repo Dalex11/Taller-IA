@@ -6,7 +6,7 @@ from Funciones.funciones import leerArchivo, revisarNodoRepetido, calcularDuraci
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
-matriz = leerArchivo("..\Matrices_de_prueba\prueba_SC_2.txt")
+matriz = leerArchivo("..\matriz.txt")
 
 # Aplicación del algoritmo
 #Recorrer la matriz por Avara
@@ -37,17 +37,17 @@ def recorrerMatriz ():
             return
             
         #Crear hijos    
-        for nueva_matriz, operador, semillas, enemigo in padre_expandido.moverElemento():    
+        for nueva_matriz, operador, semillas, pos_enemigo in padre_expandido.moverElemento():    
             #Cree el nodo hijo
             hijo = Nodo(nueva_matriz, padre_expandido, operador)
             #Calcular heurística
             valor_heuristica = calcularDistanciaManhattan(nueva_matriz)
             #llamar el método para que modifique el valor del atributo.
             hijo.set_valor_heuristica(valor_heuristica)
-            #Modificar profundidad
+            #llamar el método modificarProfundidad para que modifique el profundidad del nodo
             hijo.modificarProfundidad()
 
-            #Si el padre es la raiz o el hijo no ha existido en la rama, entonces 
+            #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
             if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):
                 #Agreguelo al final de la cola
                 cola.append(hijo)

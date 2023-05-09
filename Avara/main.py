@@ -2,6 +2,7 @@ import tkinter as tk
 from Recorrido import tiempo_total, expandidos, matriz
 from PIL import Image, ImageTk
 import time
+import os
 
 #Guardar en una variable las matrices de los nodos en la lista expandidos
 nodo_actual = expandidos[len(expandidos)-1]
@@ -58,14 +59,17 @@ imagenT = None
 def mostrarReporte():
     global imagenT
     
-    profun = expandidos[len(expandidos)-1].profundidad
-    profun_string = str(profun)
+    cost = expandidos[len(expandidos)-1].costo
+    cost_string = str(cost)
+    deep = expandidos[len(expandidos)-1].profundidad
+    deep_string = str(deep)
     cuadro_info = tk.Canvas(ventana, width=400, height=400)
     cuadro_info.place(x=580, y=50, width=600, height=600)
     cuadro_info.create_rectangle(50, 100, 500, 400, fill='white')
-    cuadro_info.create_text(250, 160, text='La profundidad de la solución es: ' + profun_string, width=400, font=("Arial", 15))
+    cuadro_info.create_text(250, 130, text='El costo de la solución es: ' + cost_string, width=400, font=("Arial", 15))
+    cuadro_info.create_text(250, 160, text='La profundidad del nodo de la solución es: ' + deep_string, width=400, font=("Arial", 15))
     cuadro_info.create_text(250, 190, text='Cantidad de nodos expandidos: ' + str(len(expandidos)) + ' nodos', width=400, font=("Arial", 15))
-    cuadro_info.create_text(250, 220, text='Tiempo de cómputo: ' + str(round(tiempo_total, 5)) + ' segundos', width=400, font=("Arial", 15))
+    cuadro_info.create_text(250, 220, text='Tiempo de cómputo: ' + str(round(tiempo_total, 3)) + ' segundos', width=400, font=("Arial", 15))
     imagen = Image.open("../imagenes/muñeca.png")
     imagen = imagen.resize((150, 150))
     imagenT = ImageTk.PhotoImage(imagen)
@@ -77,29 +81,49 @@ def verMatriz (matriz,url,etiqueta):
      canvas.delete(etiqueta)
      for i, fila in enumerate(matriz):
         for j, valor in enumerate(fila):
-            if valor == '2':
-                dibujarImagen(url[0],etiqueta,45,45,j*cell_width, i*cell_height)
             if valor == '1':
+                dibujarImagen(url[0],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '2':
                 dibujarImagen(url[1],etiqueta,45,45,j*cell_width, i*cell_height)
-            if valor == '6':
+            if valor == '3':
                 dibujarImagen(url[2],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '4':
+                dibujarImagen(url[3],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '5':
+                dibujarImagen(url[4],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '6':
+                dibujarImagen(url[5],etiqueta,45,45,j*cell_width, i*cell_height)
+            if valor == '7':
+                dibujarImagen(url[6],etiqueta,45,45,j*cell_width, i*cell_height) 
+            if valor == '8':
+                dibujarImagen(url[7],etiqueta,45,45,j*cell_width, i*cell_height) 
 
-# 2.  Mostrar el estado inicial  
+# 2.  Mostrar el estado inicial 
+# Lista de las url de las imagenes
+urlImagenes = ["../imagenes/muro.png","../imagenes/gokú.png","../imagenes/freezer.png","../imagenes/cell.png","../imagenes/semilla.png","../imagenes/esfera.png"]
+ 
 #Función que mostrará la matriz incial
 def verMatrizInical():
-    verMatriz(matriz, ["../imagenes/gokú.png","../imagenes/muro.png","../imagenes/esfera.png"],'imagen')
+    verMatriz(matriz, urlImagenes,'imagen')
 
 verMatrizInical()
 
 #Función que permitirá visualizar la animación
 def animacion ():
     for matriz in caminos_final[1:]:
-        verMatriz(matriz,["../imagenes/gokú.png","../imagenes/muro.png","../imagenes/esfera.png"],'imagen')
+        verMatriz(matriz, urlImagenes,'imagen')
         time.sleep(0.1)
         ventana.update()
     mostrarReporte()    
 
+#Función que permitirá volver al menú principal
+def volver ():
+    ventana.destroy()
+    os.system("cd ../ && python main.py")  
+
 #Agregar botones a la ventana y ejecutar función a darles click
+backBtn = tk.Button(ventana, text='Atras', command = volver, bg='black', fg='white', font=("Arial", 12))         
+backBtn.place(x=10,y=10, width=100, height=30)
 btn = tk.Button(ventana, text='Empezar', command = animacion, bg='black', fg='white', font=("Arial", 12))         
 btn.place(x=135,y=590, width=150, height=50)
 btn2 = tk.Button(ventana, text='Volver', command = verMatrizInical, bg='black', fg='white', font=("Arial", 12))         

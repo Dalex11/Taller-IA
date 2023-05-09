@@ -2,11 +2,11 @@ import os, sys
 current_dir = os.path.dirname(os.path.abspath('../Funciones/funciones.py'))
 parent_dir = os.path.dirname(current_dir)
 sys.path.append(parent_dir)
-from Funciones.funciones import leerArchivo, calcularDuracion, calcularDistanciaManhattan
+from Funciones.funciones import leerArchivo, calcularDuracion, calcularDistanciaManhattan, revisarNodoRepetido
 from Funciones.ClaseNodo import Nodo
 
 # 1.  Leer archivo .txt
-matriz = leerArchivo("..\Matrices_de_prueba\prueba_CC_1.txt")
+matriz = leerArchivo("..\matriz.txt")
 
 # Aplicación del algoritmo
 #Recorrer la matriz por costo
@@ -52,9 +52,11 @@ def recorrerMatriz ():
             hijo.set_valor_heuristica(valor_heuristica)
             #Llamar método modificarValorHeuristicaMasCosto para sumar el costo + el valor de la heurística
             hijo.modificarValorHeuristicaMasCosto()
+            #llamar el método modificarProfundidad para que modifique el profundidad del nodo
+            hijo.modificarProfundidad()
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
-            if (padre_expandido.get_costo() == 0 or hijo.get_estado() != padre_expandido.get_padre().get_estado()):
+            if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):
                 #Agreguelo al final de la cola
                 cola.append(hijo)
 
