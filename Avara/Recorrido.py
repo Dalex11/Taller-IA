@@ -48,6 +48,10 @@ def recorrerMatriz ():
             hijo.modificarCosto()
             #llamar el método modificarProfundidad para que modifique el profundidad del nodo
             hijo.modificarProfundidad()
+            #Modificar el enemigo
+            hijo.set_enemigo(pos_enemigo)
+            #Modificar estado de semilla
+            hijo.set_semilla(semillas)
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
             if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):

@@ -65,8 +65,9 @@ def calcularDistanciaManhattan(matriz):
         #Distancia total es igual a la distancia entre gokú y la única esfera que hay
         distancia_total = distancias[0]
     else:
-        #La distancia entre las esferas simere se calculará igual
-        distancia_entre_esferas = abs(coordenadas_esferas[0] - coordenadas_esferas[2]) + abs(coordenadas_esferas[1] - coordenadas_esferas[3])
+        for i in range(0, len(coordenadas_esferas) -2, 2):
+            #La distancia entre las esferas simere se calculará igual
+            distancia_entre_esferas = abs(coordenadas_esferas[i] - coordenadas_esferas[i + 2]) + abs(coordenadas_esferas[i + 1] - coordenadas_esferas[i + 3])
         # tome la distancia menor (esfera más cerca) y súmele las distancia entre esferas
         distancia_total = min(distancias) + distancia_entre_esferas
 

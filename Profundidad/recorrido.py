@@ -50,8 +50,8 @@ def recorrerMatriz():
 
             #Si es la raíz o si el estado del hijo y el estado del abuelo son diferentes, entonces 
             if (padre_expandido.profundidad == 0 or revisarNodoRepetido(hijo.get_estado(), padre_expandido)):
-                #Agreguelo al final de la cola
-                pila.append(hijo)
+                #Agreguélo al principio de la pila
+                pila.insert(0,hijo)
         
         #Agregar padre a la lista de nodos expandidos
         expandidos.append(padre_expandido)
