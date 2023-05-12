@@ -45,7 +45,7 @@ cuadro_info.create_text(200, 50, text='Proyecto 1: Goku Smart', width=400, font=
 btn_seleccionar = tk.Button(ventana, text="Seleccionar matriz", command=seleccionar_archivo)
 btn_seleccionar.place(x=175, y=100, width=150, height=50)
 
-select_options = ['Amplitud', 'Costo', 'Profundidad', 'Avara', 'A*']
+select_options = ['Amplitud', 'Costo', 'Profundidad', 'Avara', 'Estrella']
 select_menu = tk.OptionMenu(ventana, select_var, *select_options, command=on_select_change)
 select_menu.place(x=175, y=200, width=150, height=50)
 
